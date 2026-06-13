@@ -28,4 +28,4 @@ fn setup(
 }
 
 #[derive(Component)]
-struct Player;
+pub struct Player;
