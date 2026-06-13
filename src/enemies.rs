@@ -2,6 +2,8 @@ use std::time::Duration;
 
 use bevy::prelude::*;
 
+use crate::Player;
+
 pub struct EnemiePlugin;
 
 impl Plugin for EnemiePlugin {
@@ -37,12 +39,14 @@ fn spawning(
 
 fn movement(
     mut enemies: Query<&mut Transform, With<Enemy>>,
+    player: Query<&Transform, (With<Player>, Without<Enemy>)>,
 ) {
-    let target = Vec3::ZERO; // TODO: Player position
+    let Ok(target) = player.single() else { return };
+    let target = target.translation;
 
     for mut enemy in enemies.iter_mut() {
         let mut dir = target - enemy.translation;
-        dir = dir.clamp_length_max(5.0);
+        dir = dir.clamp_length_max(1.0);
 
         enemy.translation += dir;
     }
